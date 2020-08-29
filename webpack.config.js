@@ -7,22 +7,21 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const isProd = process.env.NODE_ENV === 'production';
 const isDev = !isProd;
 
-const filename = ext => isDev ? `bundle.${ext}` : `bundle.[hash].${ext}`
+const filename = ext => isDev ? `bundle.${ext}` : `bundle.[hash].${ext}`;
 
 const jsLoaders = () => {
   const loaders = [
     {
-      loader: {
-        loader: 'babel-loader',
-        options: {
-          presets: ['@babel/preset-env']
-        }
-      } 
+      loader: 'babel-loader',
+      options: {
+        presets: ['@babel/preset-env'],
+        plugins: ['@babel/plugin-proposal-class-properties']
+      }
     }
   ]
 
   if (isDev) {
-loaders.push('eslint-loader')
+    loaders.push('eslint-loader')
   }
 
   return loaders
@@ -45,8 +44,8 @@ module.exports = {
   },
   devtool: isDev ? 'source-map' : false,
   devServer: {
-    port: 4040,
-    // hot: isDev
+    port: 6555,
+    hot: isDev
   },
   plugins: [
   new CleanWebpackPlugin(),
@@ -79,9 +78,8 @@ module.exports = {
       { 
         test: /\.js$/, 
         exclude: /node_modules/, 
-        use: jsLoaders(),
-        
+        use: jsLoaders()
       }
-    ],
+    ]
   }
 }
